@@ -12,6 +12,7 @@ COMMIT=`git rev-parse HEAD`
 DB=$1
 DUMP_LOC=$DBSNAP_HOME/$DB
 DUMP_NAME=$DB-$SHORT_COMMIT
+REPO=`pwd`
 
 if [ ! -w $DUMP_LOC ]
 then
@@ -25,7 +26,7 @@ cd TMP
 
 pg_dump $DB > $DUMP_NAME.sql
 echo $COMMIT > COMMIT
-echo $PWD > REPO
+echo $REPO > REPO
 
 tar zcf $DUMP_NAME.tar.gz COMMIT REPO $DUMP_NAME.sql
 mv $DUMP_NAME.tar.gz $DUMP_LOC/.
