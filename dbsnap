@@ -1,0 +1,9 @@
+#! /bin/sh
+
+COMMIT=`git rev-parse --short HEAD`
+DB=$1
+DUMP_NAME=$DB-$COMMIT.sql
+
+pg_dump $DB > $DUMP_NAME
+
+git tag $DUMP_NAME
