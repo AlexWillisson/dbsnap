@@ -1,11 +1,16 @@
 #! /bin/sh
 
+if [ -z $1 ]
+then
+    echo "must specify postgres database"
+    exit 1
+fi
+
 DBSNAP_HOME=/opt/dbsnap
 COMMIT=`git rev-parse --short HEAD`
 DB=$1
 DUMP_LOC=$DBSNAP_HOME/$DB
-DUMP_NAME=$DB-$COMMIT.sql
-DUMP=$DUMP_LOC/$DUMP_NAME
+DUMP_NAME=$DB-$COMMIT
 
 if [ ! -w $DUMP_LOC ]
 then
@@ -14,4 +19,9 @@ then
     sudo chmod +wx $DUMP_LOC
 fi
 
-pg_dump $DB > $DUMP
+pg_dump $DB > $DUMP_NAME.sql
+echo $COMMIT > COMMIT
+
+tar zcf $DUMP_NAME.tar.gz COMMIT $DUMP_NAME.sql
+mv $DUMP_NAME.tar.gz $DUMP_LOC/.
+rm $DUMP_NAME.sql COMMIT
