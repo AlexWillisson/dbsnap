@@ -1,9 +1,19 @@
 #! /bin/sh
 
+DBSNAP_HOME=/opt/dbsnap
 COMMIT=`git rev-parse --short HEAD`
 DB=$1
+DUMP_LOC=$DBSNAP_HOME/$DB
 DUMP_NAME=$DB-$COMMIT.sql
+DUMP=$DUMP_LOC/$DUMP_NAME
 
-pg_dump $DB > $DUMP_NAME
+if [ ! -w $DUMP_LOC ]
+then
+    sudo mkdir -p $DUMP_LOC
+    sudo chown atw:atw $DUMP_LOC
+    sudo chmod +wx $DUMP_LOC
+fi
+
+pg_dump $DB > $DUMP
 
 git tag $DUMP_NAME
