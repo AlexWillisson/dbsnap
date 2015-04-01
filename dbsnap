@@ -15,5 +15,3 @@ then
 fi
 
 pg_dump $DB > $DUMP
-
-git tag $DUMP_NAME
