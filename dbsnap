@@ -2,14 +2,14 @@
 
 if [ -z $1 ]
 then
-    echo "must specify postgres database"
-    exit 1
+    DB=`basename $PWD`
+else
+    DB=$1
 fi
 
 DBSNAP_HOME=/opt/dbsnap
 SHORT_COMMIT=`git rev-parse --short HEAD`
 COMMIT=`git rev-parse HEAD`
-DB=$1
 DUMP_LOC=$DBSNAP_HOME/$DB
 DUMP_NAME=$DB-$SHORT_COMMIT
 REPO=`pwd`
